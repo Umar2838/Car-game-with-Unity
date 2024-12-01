@@ -11,7 +11,12 @@ public class CarController : MonoBehaviour
     public Transform frontLeftWheelTransform;
     public Transform backRightWheelTransform;
     public Transform backLeftWheelTransform;
+    
+    public float motorForce = 100f;
+    public float steeringAngle = 30f;
 
+    float veticalInput;
+    float horizontalInput;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -25,11 +30,23 @@ public class CarController : MonoBehaviour
     {
         MotorForce();
         UpdateWheels();
+        GetInput();
+        Steering();
+    }
+    void GetInput(){
+        // GetAxis method is used to take input from keyboard vertical for up , down , W , S and Horizontal for right , left , A , D
+        veticalInput =  Input.GetAxis("Vertical");
+        horizontalInput = Input.GetAxis("Horizontal");
+
     }
     void MotorForce() {
         // Move the collider by motorTorque
-        frontRightWheelCollider.motorTorque = 10f;
-        frontLeftWheelCollider.motorTorque = 10f;
+        frontRightWheelCollider.motorTorque = motorForce * veticalInput;
+        frontLeftWheelCollider.motorTorque = motorForce * veticalInput;
+    }
+    void Steering(){
+        frontRightWheelCollider.steerAngle = steeringAngle * horizontalInput;
+        frontLeftWheelCollider.steerAngle = steeringAngle * horizontalInput;
     }
     void UpdateWheels(){
         RotateWheel(frontRightWheelCollider,frontRightWheelTransform);
